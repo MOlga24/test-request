@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { AppDispatch, RootState } from "../services/store";
-import { TItem } from "../utils/types";
-import { addItem, updateItem } from "../services/slices/itemsSlice";
-import { categories, generateDateBasedId } from "../constants/constants";
-import { validateForm } from "../utils/validation";
+import { AppDispatch, RootState } from "../../services/store";
+import { TItem } from "../../utils/types";
+import { addItem, updateItem } from "../../services/slices/itemsSlice";
+import { categories, generateDateBasedId } from "../../constants/constants";
+import { validateForm } from "../../utils/validation";
+import styles from "./Form.module.css";
 interface FormProps {
   mode: "isEdit" | "newItem";
   onClose?: () => void;
@@ -17,21 +18,23 @@ export const Form = ({ onClose, mode }: FormProps) => {
   const existingItem =
     mode === "isEdit" && id ? items.find((item) => item.id === id) : null;
   const isEditMode = mode === "isEdit" && !!existingItem;
-  useEffect(() => {
-    if (isEditMode && existingItem) {
-      setTitle(existingItem.title || "");
-      setDescription(existingItem.description || "");
-      setCategory(existingItem.category || "");
-    } else {
-      resetForm();
-    }
-  }, [existingItem, isEditMode]);
+  const [touched, setTouched] = useState({
+    title: false,
+    description: false,
+    category: false,
+  });
+
   const dispatch = useDispatch<AppDispatch>();
 
   const resetForm = () => {
     setTitle("");
     setDescription("");
     setErrors({});
+    setTouched({
+      title: false,
+      description: false,
+      category: false,
+    });
   };
   const handleClose = () => {
     resetForm();
@@ -53,7 +56,24 @@ export const Form = ({ onClose, mode }: FormProps) => {
     category?: string;
     description?: string;
   }>({});
+  useEffect(() => {
+    if (isEditMode && existingItem) {
+      setTitle(existingItem.title || "");
+      setDescription(existingItem.description || "");
+      setCategory(existingItem.category || "");
+    } else {
+      resetForm();
+    }
+  }, [existingItem, isEditMode]);
 
+  useEffect(() => {
+    const validationErrors = validateForm(title, description, category);
+    setErrors(validationErrors);
+  }, [title, description, category]);
+
+  const handleBlur = (field: keyof typeof touched) => {
+    setTouched({ ...touched, [field]: true });
+  };
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const validationErrors = validateForm(title, description, category);
@@ -114,44 +134,66 @@ export const Form = ({ onClose, mode }: FormProps) => {
       setErrors({ ...errors, description: undefined });
     }
   };
-
+  const showError = (field: keyof typeof errors) => {
+    return touched[field] && errors[field];
+  };
   return (
     <form onSubmit={handleSubmit} className="add_item_form">
-      <div className="form_group">
-        <label>Название заявки*</label>
+      <div
+        className={`${styles.formGroup} ${
+          showError("title") ? styles.hasError : ""
+        }`}
+      >
+        <label className={styles.title}> Название заявки*</label>
         <input
           type="text"
           value={title}
           onChange={handleTitleChange}
-          required
-          className={errors.title ? "error" : ""}
+          onBlur={() => handleBlur("title")}
+          className={`${styles.inputText} ${
+            showError("title") ? styles.inputError : ""
+          }`}
           placeholder="Введите название (минимум 3 буквы)"
         />
-        {errors.title && <span className="error_message">{errors.title}</span>}
+        {showError("title") && (
+          <div className={styles.errorContainer}>
+            <span className={styles.errorMessage}>{errors.title}</span>
+          </div>
+        )}
       </div>
 
-      <div className="form_group">
-        <label>Описание*</label>
+      <div className={styles.formGroup}>
+        <label className={styles.title}>Описание*</label>
         <textarea
           value={description}
           onChange={handleDescriptionChange}
           rows={3}
-          required
-          className={errors.description ? "error" : ""}
+          onBlur={() => handleBlur("description")}
+          className={`${styles.inputText} ${
+            showError("description") ? styles.inputError : ""
+          }`}
           placeholder="Введите описание (минимум 2 слова)"
         />
-        {errors.description && (
-          <span className="error_message">{errors.description}</span>
+        {showError("description") && (
+          <div className={styles.errorContainer}>
+            <span className={styles.errorMessage}>{errors.description}</span>
+          </div>
         )}
       </div>
-      <div className="form_group">
-        <label>Категория</label>
+      <div
+        className={`${styles.formGroup} ${
+          showError("category") ? styles.hasError : ""
+        }`}
+      >
+        <label className={styles.title}>Категория</label>
 
         <select
           value={category}
           onChange={handleCategoryChange}
-          className={errors.category ? "error" : ""}
-          required
+          onBlur={() => handleBlur("category")}
+          className={`${styles.selectText} ${
+            showError("category") ? styles.inputError : ""
+          }`}
         >
           <option value="">Выберите из списка</option>
           {categories.map((cat, index) => (
@@ -160,11 +202,13 @@ export const Form = ({ onClose, mode }: FormProps) => {
             </option>
           ))}
         </select>
-        {errors.category && (
-          <span className="error_message">{errors.category}</span>
+        {showError("category") && (
+          <div className={styles.errorContainer}>
+            <span className={styles.errorMessage}>{errors.category}</span>
+          </div>
         )}
       </div>
-      <div className="form_actions">
+      <div className={styles.formActions}>
         <button type="button" onClick={handleClose} className="cancel_btn">
           Отмена
         </button>

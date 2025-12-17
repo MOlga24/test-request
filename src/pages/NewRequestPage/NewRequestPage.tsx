@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import { Breadcrumbs } from "../utils/bredcrumps";
+import { Breadcrumbs } from "../../utils/bredcrumps";
 import React, { MouseEvent as ReactMouseEvent } from "react";
-import { Form } from "../components/Form";
-
+import { Form } from "../../components/Form/Form";
+import styles from "./NewRequestPage.module.css"
 export const NewRequests = () => {
   const breadcrumbsItems = [
     { label: "Главная", link: "/requests" },
@@ -27,11 +27,11 @@ export const NewRequests = () => {
   };
 
   return (
-    <main className="page_wrapper" onClick={handleContainerClick}>
+    <main className={styles.pageWrapper} onClick={handleContainerClick}>
       <Breadcrumbs items={breadcrumbsItems} />
-      <div className="requestWrapper">
+      <div className={styles.requestWrapper}>
         <h2>Создание заявки</h2>
-        <div className="modal_content" onClick={(e) => e.stopPropagation()}>
+        <div className={styles.formContent}  onClick={(e) => e.stopPropagation()}>
           <Form onClose={handleClose} mode="newItem" />
         </div>{" "}
       </div>

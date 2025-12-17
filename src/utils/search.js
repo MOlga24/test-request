@@ -16,10 +16,9 @@ export const searchItems = (query, items) => {
   return items.filter((item) => {
     const searchString = [
       item.title,
-      item.description,
-      item.fulldescription,
+      item.description,     
       item.category,
-      item.subcategory,
+      
     ]
       .filter(Boolean)
       .map(normalizeString)

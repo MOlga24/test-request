@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import Header from "../components/Header";
-import { Home } from "../pages/HomePage";
-import { ItemFull } from "../pages/ItemPage";
+import Header from "../components/Header/Header";
+import { Home } from "../pages/HomePage/HomePage";
+import { ItemFull } from "../pages/ItemPage/ItemPage";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../services/store";
 import { AppDispatch } from "../services/store";
 
-import { NewRequests } from "../pages/NewRequestPage";
+import { NewRequests } from "../pages/NewRequestPage/NewRequestPage";
 import { getFallbackData } from "../constants/constants";
 
 const AppRoutes = () => {

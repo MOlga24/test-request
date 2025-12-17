@@ -31,5 +31,9 @@ export const validateForm = (
       newErrors.description = "Описание должно содержать минимум 10 символов";
     }
   }
+   const categoryTrimmed = category.trim();
+  if (!categoryTrimmed) {
+    newErrors.category = "Пожалуйста, выберите категорию";
+  }
   return newErrors;
 };

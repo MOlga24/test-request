@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import { RiSearchLine } from "react-icons/ri";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { RootState } from "../services/store";
-import { searchItems } from "../utils/search";
-
+import { RootState } from "../../services/store";
+import { searchItems } from "../../utils/search";
+import styles from "./SearchInput.module.css";
 interface SearchItem {
   id: string;
   title: string;
@@ -22,7 +22,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
   const [searchResults, setSearchResults] = useState<SearchItem[]>([]);
   const [showResults, setShowResults] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
-
+  const navigate = useNavigate();
   const items = useSelector((state: RootState) => state.items.items);
   const searchRef = useRef<HTMLDivElement>(null);
   const SearchLineIcon = RiSearchLine as React.ElementType;
@@ -60,19 +60,20 @@ export const SearchInput: React.FC<SearchInputProps> = ({
   const handleBlur = () => {
     setIsFocused(false);
   };
-  const handleResultClick = () => {
+  const handleResultClick = (item: SearchItem) => {
     setSearchQuery("");
     setShowResults(false);
+    navigate(`/requests/${item.id}`);
   };
   return (
-    <div className={`search_input_container ${className}`} ref={searchRef}>
+    <div className={`${styles.container} ${className}`} ref={searchRef}>
       <SearchLineIcon
-        className="icon_search"
+        className={styles.icon}
         style={{ display: isFocused ? "none" : "block" }}
       />
       <input
         id="search"
-        className="search"
+        className={styles.search}
         value={searchQuery}
         onChange={handleSearch}
         onFocus={handleFocus}
@@ -81,25 +82,24 @@ export const SearchInput: React.FC<SearchInputProps> = ({
       />
 
       {showResults && searchResults.length > 0 && (
-        <div className="search_results">
+        <div className={styles.searchResults}>
           {searchResults.map((item) => (
-            <NavLink
+            <div
               key={item.id}
-              to={`/requests/${item.id}`}
-              className="search_result_item"
-              onClick={handleResultClick}
+              className={styles.searchItem}
+              onClick={() => handleResultClick(item)}
             >
               <div>
                 <p>{item.title}</p>
                 <p>{item.date} </p>
               </div>
-            </NavLink>
+            </div>
           ))}
         </div>
       )}
       {showResults && searchResults.length === 0 && (
-        <div className="search_results">
-          <p className="no_results">Ничего не найдено</p>
+        <div className={styles.searchResults}>
+          <p className={styles.noResults}>Ничего не найдено</p>
         </div>
       )}
     </div>

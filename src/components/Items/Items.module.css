@@ -1,0 +1,50 @@
+.empty {
+  padding-top: 20px;
+}
+.Wrapper {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  height: auto;
+  gap: 20px;
+  padding: 20px;
+}
+
+.itemsWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  height: auto;
+  gap: 20px;
+  padding: 20px;
+}
+@media (max-width: 1200px) {
+  .itemsWrapper {
+    justify-content: center;
+  }
+}
+@media (max-width: 375px) {
+  .itemsWrapper {
+    flex-direction: column;
+  }
+}
+.item {
+  padding: 15px;
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  background: #9cd63f9d;
+  overflow: hidden;
+  border-radius: 5px;
+  gap: 8px;
+}
+@media (max-width: 768px) {
+  .item {
+    min-width: 200px;
+  }
+}
+@media (max-width: 375px) {
+  .item {
+    width: auto;
+  }
+}
