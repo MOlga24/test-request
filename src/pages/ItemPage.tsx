@@ -12,9 +12,7 @@ import ShowItem from "../components/ShowItem";
 import { AppDispatch, RootState } from "../services/store";
 
 import {
-  addFavorite,
-  FavoriteItemsSelector,
-  removeFavorite,
+
 } from "../services/slices/itemsSlice";
 
 const handleContainerClick = (e: ReactMouseEvent<HTMLDivElement>) => {
@@ -34,9 +32,8 @@ export const ItemFull = () => {
   const location = useLocation();
   const [item, setItem] = useState(location.state?.item);
   const { id } = useParams();
-  const items = useSelector((state: RootState) => state.items.items);
-  const [activeTab, setActiveTab] = useState("info");
-  const favoriteItems = useSelector(FavoriteItemsSelector); 
+  const items = useSelector((state: RootState) => state.items.items); 
+
   const foundItem = useSelector((state: RootState) =>
     id ? state.items.items.find((item) => item.id === id) : null
   );
@@ -48,25 +45,11 @@ export const ItemFull = () => {
   }, [item, foundItem]);
 
   const breadcrumbsItems = [
-    { label: "Главная", link: "/products" },
-    { label: item?.title || "Товар" },
+    { label: "Главная", link: "/requests" },
+    { label: `Заявка № ${item?.id}` || "Заявка №" },
   ];
 
-  const toggleFavoriteItem = useCallback(
-    (item: { id: string }) => {
-      if (!item) return;
-      const isCurrentlyFavorite = favoriteItems.some(
-        (favItem) => favItem.id === item.id
-      );
-
-      if (isCurrentlyFavorite) {
-        dispatch(removeFavorite(item.id));
-      } else {
-        dispatch(addFavorite(item.id));
-      }
-    },
-    [dispatch, favoriteItems]
-  );
+  
 
   useEffect(() => {
     if (item && items) {
@@ -85,41 +68,20 @@ export const ItemFull = () => {
   }, [id, items, item]);
 
   if (!item) {
-    return <div>Товар не найден</div>;
+    return <div>Заявки не найдены</div>;
   }
 
   return (
-    <div className="main" onClick={handleContainerClick}>
+    <div className="page_wrapper" onClick={handleContainerClick}>
       <Breadcrumbs items={breadcrumbsItems} />
       <div className="item_full_main_title">
-        <p className="full_item_title">{item.title}</p>
+        <p className="title">Заявка №{item.id}</p>
       </div>
 
-      <div className="item_menu">
-        <p
-          className={activeTab === "info" ? "active" : ""}
-          onClick={() => setActiveTab("info")}
-        >
-          Общая информация
-        </p>
-        <p
-          className={activeTab === "description" ? "active" : ""}
-          onClick={() => setActiveTab("description")}
-        >
-          Описание
-        </p>
-        <p
-          className={activeTab === "reviews" ? "active" : ""}
-          onClick={() => setActiveTab("reviews")}
-        >
-          Отзывы
-        </p>
-      </div>
 
       <ShowItem
-        item={item}
-        toggleFavoriteItem={toggleFavoriteItem}
-        activeTab={activeTab}
+        item={item}       
+       
       />
     </div>
   );

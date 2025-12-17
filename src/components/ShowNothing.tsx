@@ -1,19 +1,15 @@
 import { useNavigate } from "react-router-dom";
 
-export const ShowNothing = ({ isFavorite = false }) => {
+export const ShowNothing = () => {
   const navigate = useNavigate();
   return (
     
       <div className="empty">
-        {isFavorite ? (
-          <h5>В вашем избранном пока пусто</h5>
-        ) : (
-          <h5>Ваша корзина пока пуста</h5>
-        )}
+   
         <h5 className="regular">
-          Вы можете найти интересующие вас картинки на главной странице
+          Вы можете найти интересующие вас заявки на главной странице
         </h5>
-        <button className="button" onClick={() => navigate("/products")}>
+        <button className="button" onClick={() => navigate("/requests")}>
           На главную
         </button>
       </div>

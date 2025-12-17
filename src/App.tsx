@@ -1,6 +1,6 @@
 
 import { BrowserRouter as Router } from "react-router-dom";
-import AppRoutes from "./components/AppRoutes";
+import AppRoutes from "./app/AppRoutes";
 
 const App: React.FC = () => {
   return (
