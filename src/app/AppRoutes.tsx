@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import Header from "../components/Header/Header";
+import Header from "../widgets/Header/Header";
 import { Home } from "../pages/HomePage/HomePage";
 import { ItemFull } from "../pages/ItemPage/ItemPage";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../services/store";
-import { AppDispatch } from "../services/store";
+import { RootState } from "../app/store";
+import { AppDispatch } from "../app/store";
 
 import { NewRequests } from "../pages/NewRequestPage/NewRequestPage";
-import { getFallbackData } from "../constants/constants";
+import { getFallbackData } from "../shared/api/constants";
 
 const AppRoutes = () => {
   const dispatch = useDispatch<AppDispatch>();

@@ -1,6 +1,6 @@
 import React from "react";
-import { SearchInput } from "../SearchInput/SearchInput";
 import styles from "./Header.module.css";
+import { SearchInput } from "../../features/search/SearchInput/SearchInput";
 
 export default function Header() {
   return (

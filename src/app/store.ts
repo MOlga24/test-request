@@ -4,7 +4,8 @@ import {
   useSelector as selectorHook,
 } from "react-redux";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import { itemsSlice } from "./slices/itemsSlice";
+import { itemsSlice } from "../entities/item/api/itemsSlice";
+
 export type RootState = ReturnType<typeof rootReducer>;
 
 export const rootReducer = combineReducers({

@@ -1,8 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import { Breadcrumbs } from "../../utils/bredcrumps";
+import { Breadcrumbs } from "../../features/breadcrumps/bredcrumps";
 import React, { MouseEvent as ReactMouseEvent } from "react";
-import { Form } from "../../components/Form/Form";
+
 import styles from "./NewRequestPage.module.css"
+import { Form } from "../../shared/ui/Form/Form";
 export const NewRequests = () => {
   const breadcrumbsItems = [
     { label: "Главная", link: "/requests" },

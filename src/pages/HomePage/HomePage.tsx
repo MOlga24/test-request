@@ -1,10 +1,11 @@
-import Items from "../../components/Items/Items";
+
 import { useSelector } from "react-redux";
-import { RootState } from "../../services/store";
-import { ScrollToTop } from "../../components/ScrollToTop";
+import { RootState } from "../../app/store";
+import { ScrollToTop } from "../../shared/ui/ScrollToTop/ScrollToTop";
 import { FiPlus } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import styles from "./HomePage.module.css"
+import Items from "../../widgets/Items/Items";
 export const Home = () => {
   const navigate = useNavigate();
   const handlePlusClick = () => {
@@ -19,7 +20,7 @@ export const Home = () => {
         <button className={`${styles.addRequest} ${styles.button}`} onClick={handlePlusClick}>
           <p>Создать заявку</p>
           <FiPlusIcon
-            className="icon_plus"
+            className={styles.icon}
             onClick={handlePlusClick}
             style={{ cursor: "pointer" }}
           />

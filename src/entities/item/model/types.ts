@@ -1,4 +1,4 @@
-import { store, rootReducer } from "../services/store";
+import { store, rootReducer } from "../../../app/store";
 export type AppDispatch = typeof store.dispatch;
 
 export type TItem = {

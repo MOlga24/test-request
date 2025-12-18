@@ -1,7 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { TItem } from "../utils/types";
+
 import { FiTrash2, FiEdit2, FiHome } from "react-icons/fi";
+import styles from "./Item.module.css";
+import { TItem } from "../../model/types";
 export type ItemMode = "compact" | "detailed" | "full";
 interface ItemProps {
   item: TItem;
@@ -24,21 +26,21 @@ const Item: React.FC<ItemProps> = ({
   const FiHomeIcon = FiHome as React.ElementType;
   const renderCommonContent = () => (
     <>
-      <h2 className="item__title">{item.title}</h2>
-      <span className="subtitle">Дата создания заявки:</span>{" "}
-      <p className="item__description">{item.date}</p>
-      <span className="subtitle">Категория заявки:</span>
-      <p className="item__description"> {item.category}</p>
-      <span className="subtitle">Описание заявки:</span>
+      <h2 className={styles.title}>{item.title}</h2>
+      <span className={styles.subtitle}>Дата создания заявки:</span>{" "}
+      <p>{item.date}</p>
+      <span className={styles.subtitle}>Категория заявки:</span>
+      <p className={styles.description}> {item.category}</p>
+      <span className={styles.subtitle}>Описание заявки:</span>
     </>
   );
   const renderByMode = () => {
     switch (mode) {
       case "compact":
         return (
-          <div className="wrapper">
+          <div className={styles.wrapper}>
             {renderCommonContent()}
-            <p className="description" title={item.description}>
+            <p className={styles.description} title={item.description}>
               {item.description.substring(0, 50)}...
             </p>
           </div>
@@ -46,26 +48,27 @@ const Item: React.FC<ItemProps> = ({
 
       case "full":
         return (
-          <div className="full_item">
-            <div className="full_item_descriprion">
-              <h2 className="title">{item.title}</h2>
-              <h3 className="full_item_sub_title">Создана:</h3>
-              <span className="full_item_date"> {item.date}</span>
-              <h3 className="full_item_sub_title">Категория заявки</h3>
+          <div className={styles.itemFull}>
+            <div className={styles.itemFullDescription}>
+              <h2 className={styles.title}>{item.title}</h2>
+              <h3 className={styles.subTitle}>Создана:</h3>
+              <span> {item.date}</span>
+              <h3 className={styles.subTitle}>Категория заявки</h3>
               <span>{item.category}</span>
-              <h3 className="full_item_sub_title">Описание заявки</h3>
-              <p className="full_item_description">{item.description}</p>
+              <h3 className={styles.subTitle}>Описание заявки</h3>
+              <p className={styles.itemFullDescription}>{item.description}</p>
             </div>
 
             {(onEdit || onDelete || onNavigateHome) && (
-              <div className="menu">
+              <div className={styles.menu}>
                 {onEdit && (
                   <button
-                    className="edit_request button "
+                    className={`${styles.edit} ${styles.button}`}
                     onClick={() => onEdit(item)}
                   >
                     <FiEditIcon
                       onClick={() => onEdit(item)}
+                      className={styles.icon}
                       stroke="#e0d9d9ff"
                     />{" "}
                     Редактировать
@@ -73,22 +76,25 @@ const Item: React.FC<ItemProps> = ({
                 )}
                 {onDelete && (
                   <button
-                    className="delete_request button "
+                    className={`${styles.delete} ${styles.button}`}
                     onClick={() => onDelete(item.id)}
                   >
                     <FiTrashIcon
                       onClick={() => onDelete(item.id)}
                       stroke="#e0d9d9ff"
-                      className="icon"
+                      className={styles.icon}
                     />{" "}
                     Удалить
                   </button>
                 )}
                 {onNavigateHome && (
-                  <button className="home  button" onClick={onNavigateHome}>
+                  <button
+                    className={`${styles.home} ${styles.button}`}
+                    onClick={onNavigateHome}
+                  >
                     <FiHomeIcon
                       stroke="#e0d9d9ff"
-                      className="icon"
+                      className={styles.icon}
                       onClick={onNavigateHome}
                     />{" "}
                     На главную

@@ -15,8 +15,10 @@
 
 .icon:hover {
   color: #000000;
+  transform: scale(1.2);
   transition: color 500ms ease;
 }
+
 .search {
   width: 100%;
   padding: 10px 40px 10px 35px;

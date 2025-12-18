@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction, createSelector } from "@reduxjs/toolkit";
-import { TItem } from "../../utils/types";
-import { getFallbackData } from "../../constants/constants";
+import { TItem } from "../model/types";
+import { getFallbackData } from "../../../shared/api/constants";
 
 export interface ItemsListState {
   items: TItem[];

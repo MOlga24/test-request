@@ -53,3 +53,29 @@
   justify-content: flex-end;
   margin-top: 20px;
 }
+
+.cancel,
+.submit {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cancel {
+  background: #f0f0f0;
+}
+
+.submit {
+  background: #007bff;
+  color: white;
+}
+
+.cancel:hover {
+  background: #ddd9d9;
+}
+
+.submit:hover {
+  background: #0367d3;
+  color: white;
+}

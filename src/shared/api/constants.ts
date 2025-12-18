@@ -1,4 +1,4 @@
-import { TItem } from "../utils/types";
+import { TItem } from "../../entities/item/model/types";
 export const categories = [
   "Категория 1",
   "Категория 2",

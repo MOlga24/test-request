@@ -1,7 +1,8 @@
 import React from "react";
 import { FiX } from "react-icons/fi";
-import { Form } from "../Form/Form";
 import styles from "./EditItemModal.module.css";
+import { Form } from "../../shared/ui/Form/Form";
+
 interface EditItemModalProps {
   isOpen: boolean;
   onClose: () => void;

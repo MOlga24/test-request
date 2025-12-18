@@ -1,31 +1,34 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { AppDispatch, RootState } from "../../services/store";
-import { TItem } from "../../utils/types";
-import { addItem, updateItem } from "../../services/slices/itemsSlice";
-import { categories, generateDateBasedId } from "../../constants/constants";
-import { validateForm } from "../../utils/validation";
+import { categories } from "../../../shared/api/constants";
 import styles from "./Form.module.css";
+import { AppDispatch, RootState } from "../../../app/store";
+import { TItem } from "../../../entities/item/model/types";
+import { validateForm } from "../../../entities/item/model/validation";
+import { addItem, updateItem } from "../../../entities/item/api/itemsSlice";
+import { generateDateBasedId } from "../../api/constants";
+
 interface FormProps {
   mode: "isEdit" | "newItem";
   onClose?: () => void;
 }
+
 export const Form = ({ onClose, mode }: FormProps) => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const items = useSelector((state: RootState) => state.items.items);
   const existingItem =
-    mode === "isEdit" && id ? items.find((item) => item.id === id) : null;
+    mode === "isEdit" && id
+      ? items.find((item: TItem) => item.id === id)
+      : null;
   const isEditMode = mode === "isEdit" && !!existingItem;
   const [touched, setTouched] = useState({
     title: false,
     description: false,
     category: false,
   });
-
   const dispatch = useDispatch<AppDispatch>();
-
   const resetForm = () => {
     setTitle("");
     setDescription("");
@@ -44,18 +47,17 @@ export const Form = ({ onClose, mode }: FormProps) => {
       navigate("/requests");
     }
   };
-
   const [title, setTitle] = useState(existingItem?.title || "");
   const [description, setDescription] = useState(
     existingItem?.description || ""
   );
   const [category, setCategory] = useState(existingItem?.category || "");
-
   const [errors, setErrors] = useState<{
     title?: string;
     category?: string;
     description?: string;
   }>({});
+
   useEffect(() => {
     if (isEditMode && existingItem) {
       setTitle(existingItem.title || "");
@@ -74,6 +76,7 @@ export const Form = ({ onClose, mode }: FormProps) => {
   const handleBlur = (field: keyof typeof touched) => {
     setTouched({ ...touched, [field]: true });
   };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const validationErrors = validateForm(title, description, category);
@@ -90,7 +93,7 @@ export const Form = ({ onClose, mode }: FormProps) => {
         title: title.trim(),
         category: category,
         description: description.trim(),
-        date: existingItem.date, // Сохраняем оригинальную дату
+        date: existingItem.date,
         fulldescription: description.trim(),
       };
       dispatch(updateItem(updatedItem));
@@ -114,29 +117,36 @@ export const Form = ({ onClose, mode }: FormProps) => {
       navigate("/requests");
     }
   };
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value);
-    if (errors.title) {
-      setErrors({ ...errors, title: undefined });
-    }
-  };
-  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setCategory(e.target.value);
-    if (errors.category) {
-      setErrors({ ...errors, category: undefined });
-    }
-  };
-  const handleDescriptionChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement>
+
+  const handleInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >,
+    field: "title" | "category" | "description"
   ) => {
-    setDescription(e.target.value);
-    if (errors.description) {
-      setErrors({ ...errors, description: undefined });
+    const value = e.target.value;
+
+    switch (field) {
+      case "title":
+        setTitle(value);
+        break;
+      case "category":
+        setCategory(value);
+        break;
+      case "description":
+        setDescription(value);
+        break;
+    }
+
+    if (errors[field]) {
+      setErrors({ ...errors, [field]: undefined });
     }
   };
+
   const showError = (field: keyof typeof errors) => {
     return touched[field] && errors[field];
   };
+
   return (
     <form onSubmit={handleSubmit} className="add_item_form">
       <div
@@ -148,7 +158,7 @@ export const Form = ({ onClose, mode }: FormProps) => {
         <input
           type="text"
           value={title}
-          onChange={handleTitleChange}
+          onChange={(e) => handleInputChange(e, "title")}
           onBlur={() => handleBlur("title")}
           className={`${styles.inputText} ${
             showError("title") ? styles.inputError : ""
@@ -166,7 +176,7 @@ export const Form = ({ onClose, mode }: FormProps) => {
         <label className={styles.title}>Описание*</label>
         <textarea
           value={description}
-          onChange={handleDescriptionChange}
+          onChange={(e) => handleInputChange(e, "description")}
           rows={3}
           onBlur={() => handleBlur("description")}
           className={`${styles.inputText} ${
@@ -189,7 +199,7 @@ export const Form = ({ onClose, mode }: FormProps) => {
 
         <select
           value={category}
-          onChange={handleCategoryChange}
+          onChange={(e) => handleInputChange(e, "category")}
           onBlur={() => handleBlur("category")}
           className={`${styles.selectText} ${
             showError("category") ? styles.inputError : ""
@@ -209,10 +219,10 @@ export const Form = ({ onClose, mode }: FormProps) => {
         )}
       </div>
       <div className={styles.formActions}>
-        <button type="button" onClick={handleClose} className="cancel_btn">
+        <button type="button" onClick={handleClose} className={styles.cancel}>
           Отмена
         </button>
-        <button type="submit" className="submit_btn">
+        <button type="submit" className={styles.submit}>
           Сохранить
         </button>
       </div>

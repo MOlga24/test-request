@@ -1,13 +1,15 @@
 import React, { useEffect, useState, useCallback } from "react";
 
-import { Breadcrumbs } from "../../utils/bredcrumps";
+import { Breadcrumbs } from "../../features/breadcrumps/bredcrumps";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../services/store";
-import { removeItem } from "../../services/slices/itemsSlice";
-import Item from "../../components/Item";
-import EditItemModal from "../../components/EditItemModal/EditItemModal";
+import { AppDispatch, RootState } from "../../app/store";
+import { removeItem } from "../../entities/item/api/itemsSlice";
+
+import EditItemModal from "../../widgets/EditItemModal/EditItemModal";
 import styles from "./ItemPage.module.css";
+import { TItem } from "../../entities/item/model/types";
+import Item from "../../entities/item/ui/Item/Item";
 
 export const ItemFull = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -16,14 +18,14 @@ export const ItemFull = () => {
   const items = useSelector((state: RootState) => state.items.items);
 
   const [currentItem, setCurrentItem] = useState(() =>
-    id ? items.find((item) => item.id === id) : null
+    id ? items.find((item:TItem) => item.id === id) : null
   );
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     if (id) {
-      const foundItem = items.find((item) => item.id === id);
+      const foundItem = items.find((item:TItem) => item.id === id);
       setCurrentItem(foundItem || null);
     } else {
       setCurrentItem(null);

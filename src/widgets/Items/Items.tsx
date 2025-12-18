@@ -1,7 +1,8 @@
 import React from "react";
-import Item from "../Item";
-import { TItem } from "../../utils/types";
+import { TItem } from "../../entities/item/model/types";
 import styles from "./Items.module.css"
+import Item from "../../entities/item/ui/Item/Item";
+
 interface ItemsProps {
   items: TItem[];
 }

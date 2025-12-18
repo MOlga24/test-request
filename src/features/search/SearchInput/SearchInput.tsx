@@ -2,9 +2,10 @@ import React, { useState, useRef, useEffect } from "react";
 import { RiSearchLine } from "react-icons/ri";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { RootState } from "../../services/store";
-import { searchItems } from "../../utils/search";
+
 import styles from "./SearchInput.module.css";
+import { RootState } from "../../../app/store";
+import { searchItems } from "../lib/search";
 interface SearchItem {
   id: string;
   title: string;
